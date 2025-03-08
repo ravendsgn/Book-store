@@ -61,15 +61,29 @@
             margin: 5px 0;
             color: #555;
         }
-        .price {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            background-color: #4eb9d4;
-            color: #000000;
-            font-weight: bold;
-            font-size: 16px;
+        .book-card .actions {
             margin-top: 10px;
+        }
+        .book-card a,
+        .book-card form button {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            background-color: #28a745;
+            transition: background-color 0.3s;
+        }
+        .book-card a:hover {
+            background-color: #218838;
+        }
+        .book-card form button {
+            background-color: #dc3545;
+        }
+        .book-card form button:hover {
+            background-color: #c82333;
         }
         .no-books {
             grid-column: span 2;
@@ -84,6 +98,7 @@
         <form method="get">
             <input type="text" name="q" placeholder="Search books" value="{{ request.GET.q }}">
             <button type="submit">Search</button>
+            <a href="{% url 'book_create' %}" class="create-btn">Create New Book</a>
         </form>
 
         <div class="book-list">
@@ -92,7 +107,14 @@
                     <h2>{{ book.title }}</h2>
                     <p>By: <strong>{{ book.author }}</strong></p>
                     <p>Genre: {{ book.genre }}</p>
-                    <p class="price">Price: ${{ book.price }}</p>
+                    <p>Price: ${{ book.price }}</p>
+                    <div class="actions">
+                        <a href="{% url 'book_update' book.pk %}">Edit</a>
+                        <form method="post" action="{% url 'book_delete' book.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
                 </div>
             {% empty %}
                 <p class="no-books">No books found.</p>
@@ -101,3 +123,4 @@
     </div>
 </body>
 </html>
+

@@ -20,7 +20,7 @@ def book_create(request):
         form = BookForm()
     return render(request, 'books/book_form.html', {'form': form})
 
-# Update a Book
+
 def book_update(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
@@ -39,3 +39,17 @@ def book_delete(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'books/book_confirm_delete.html', {'book': book})
+
+
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'books/signup.html', {'form': form})
